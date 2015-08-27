@@ -39,16 +39,20 @@ endfunction
 " a:attr are directly inserted into a highlight command. Valid values for
 " a:fg and a:bg include the empty string (indicating NONE) and the first
 " eight items in s:color_indices.
-function! s:Style(hlgroup, fg, bg, attr)
+function! s:Style(hlgroup, fg, bg, attr, ...)
   " get terminal color index
   let l:fg_idx = index(s:color_indices, a:fg)
   let l:bg_idx = index(s:color_indices, a:bg)
 
-  let l:ctermfg = l:fg_idx == -1 ? "NONE" : l:fg_idx
-  let l:ctermbg = l:bg_idx == -1 ? "NONE" : l:bg_idx
-  let l:guifg   = a:fg     == "" ? "NONE" : a:fg
-  let l:guibg   = a:bg     == "" ? "NONE" : a:bg
-  let l:attr    = a:attr   == "" ? "NONE" : a:attr
+  let l:ctermfg   = l:fg_idx == -1 ? "NONE" : l:fg_idx
+  let l:ctermbg   = l:bg_idx == -1 ? "NONE" : l:bg_idx
+  let l:guifg     = a:fg     == "" ? "NONE" : a:fg
+  let l:guibg     = a:bg     == "" ? "NONE" : a:bg
+  let l:attr      = a:attr   == "" ? "NONE" : a:attr
+  let l:cust_opts = ""
+  if a:0 > 0
+      let l:cust_opts = a:1
+  endif
 
   " use bright colors with the bold attr
   if a:attr =~# "bold" && (0 <= l:fg_idx && l:fg_idx < 8)
@@ -57,7 +61,7 @@ function! s:Style(hlgroup, fg, bg, attr)
 
   execute "highlight " . a:hlgroup . " ctermfg=" . l:ctermfg . " ctermbg=" .
     \ l:ctermbg . " cterm=" . l:attr . " guifg=" . l:guifg . " guibg=" .
-    \ l:guibg . " gui=" . l:attr
+    \ l:guibg . " gui=" . l:attr . " " . l:cust_opts
 endfunction
 
 " }}}
@@ -198,7 +202,7 @@ call s:Style("VertSplit",      "",        "",        "reverse")
 call s:Style("StatusLine",     "",        "",        "reverse,bold")
 call s:Style("StatusLineNC",   "",        "",        "reverse")
 call s:Style("WildMenu",       s:white,   s:magenta, "bold")
-call s:Style("Search",         s:black,   s:yellow,  "")
+call s:Style("Search",         s:black,   s:cyan,    "")
 call s:Style("IncSearch",      s:black,   s:yellow,  "")
 call s:Style("Directory",      s:blue,    "",        "bold")
 call s:Style("DiffAdd",        s:green,   "",        "")
@@ -212,10 +216,10 @@ call s:Style("Pmenu",          s:white,   s:magenta, "")
 call s:Style("PmenuSel",       "",        "",        "reverse")
 call s:Style("PmenuSbar",      "",        s:white,   "")
 call s:Style("PmenuThumb",     "",        s:black,   "")
-call s:Style("SpellBad",       "",        s:red,     "")
-call s:Style("SpellCap",       "",        s:green,   "")
-call s:Style("SpellRare",      "",        s:green,   "")
-call s:Style("SpellLocal",     "",        s:green,   "")
+call s:Style("SpellBad",       "",        "",        "undercurl")
+call s:Style("SpellCap",       "",        "",        "undercurl", "guisp=LightCyan")
+call s:Style("SpellRare",      "",        "",        "")
+call s:Style("SpellLocal",     "",        "",        "undercurl", "guisp=LightBlue")
 
 " Purposefully left unset: Conceal
 
