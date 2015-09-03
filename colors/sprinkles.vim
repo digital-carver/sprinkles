@@ -156,6 +156,7 @@ call s:Style("Underlined",     "",        "",        "underline")
 call s:Style("Error",          s:white,   s:red,     "bold")
 call s:Style("Todo",           s:black,   s:yellow,  "")
 call s:Style("MatchParen",     "",        s:cyan,    "")
+call s:Style("Operator",       s:magenta, "",        "")
 
 " }}}
 
